@@ -1,7 +1,7 @@
 ;;; For use in Lisp project
 ;;; Imported from project-data.lisp (M-x insert-file)
 
-(defconstant message 
+(defconstant project-message 
   '(
               no yes not yes yes not no no no is is hello yes no no yes not no
               not no hello is goodbye no yes when no yes not no not no
@@ -17,22 +17,19 @@
     ))
 
 ;;; Imported from Dr. Wyatt make-freq-list.lisp and edited for comprehension (M-x insert-file)
-;;; FUNCTION NAME:              freqlist
-;;; DESCRIPTION:                create a list of a list of characters and freqency
-;;; INPUT PARAMS:               "messVar" is the list of message;
-;;; OUTPUT:                     list of sorted frequency of characters
-(defun freqlist(messVar)
+;;; create a list of a list of characters and freqency value
+(defun freqlist(message)
   "Receives a message and passes it into another function to make frequency list"
-  (freqlist-recur messVar nil))
+  (freqlist-recur message nil))
 
 ;;; FUNCTION NAME:		freqlist-recur
 ;;; DESCRIPTION:		cereates a frequency list recursively
 ;;; INPUT PARAMS:		"messVar" = message;
 ;;; OUTPUT:		       	frequency list and modified message
-(defun freqlist-recur(messVar recurfreqlist)
+(defun freqlist-recur(message recurfreqlist)
   "Receives a message and a frequency list, then appends to frequency list recursively"
-  (cond((endp messVar)recurfreqlist)
-       (T(freqlist-recur(rest messVar)(update(first messVar)recurfreqlist)))))
+  (cond((endp message)recurfreqlist)
+       (T(freqlist-recur(rest message)(update(first message)recurfreqlist)))))
 
 ;;; FUNCTION NAME:		update      
 ;;; DESCRIPTION:                update the frequency list	
@@ -52,13 +49,10 @@
   "check if the inputted letter matches the 1st element in the list"
   (equal inputLetter(first freqlistVar)))
 
-;;; FUNCTION NAME:	        incpair      
-;;; DESCRIPTION:                increment the frequency of a letter
-;;; INPUT PARAMS:               "ip" = frequency list pair
-;;; OUTPUT:                     updated frequency of the letter
-(defun incpair (ip)
+;;; p = frequency list pair update frequency of the letter
+(defun incpair (p)
   "Increment the matching letter frequency by and return that list"
-  (list(first ip)(1+(second ip))))
+  (list(first p)(1+(second p))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -156,9 +150,9 @@
 ;;; DESCRIPTION:                make huffman tree
 ;;; INPUT PARAMS:               "messVar" = inputted message
 ;;; OUTPUT:   			THE Huffman Tree
-(defun make-huffman-tree (messVar)
+(defun make-huffman-tree (message)
   "Creates a Huffman Tree from message, which is a list of symbols"
-  (first(create-huffman-tree(initial-htree messVar))))
+  (first(create-huffman-tree(initial-htree message))))
 
 ;;; FUNCTION NAME:		initial-htree
 ;;; DESCRIPTION:		creates an initial htree from a frequency list
@@ -172,10 +166,10 @@
 ;;; DESCRIPTION:		takes a htree and message then returns an encoded binary
 ;;; INPUT PARAMS:		htree-HuffmanTree & messVar-a message
 ;;; OUTPUT:		       	encoded binary
-(defun encode(htree messVar)
+(defun encode(htree message)
   "Encode message, using the HuffmanTree huffman-tree"
-  (cond((endp messVar)nil)	;if end of message, return nil
-       (t(append(encode-single htree(first messVar)'())(encode htree(rest messVar))))))	;else recursive call
+  (cond((endp message)nil)	;if end of message, return nil
+       (t(append(encode-single htree(first message)'())(encode htree(rest message))))))	;else recursive call
 
 ;;; FUNCTION NAME:		encode-single
 ;;; DESCRIPTION:		based on the nodes of the tree, encode a htree
